@@ -1,0 +1,30 @@
+
+_target_: src.models.HFModelPL
+
+name: ${hf_model_name:${.pretrained_model_name_or_path}}
+
+half_precision: True
+
+pretrained_model_name_or_path: ??? # local path to the model, should be specified at runtime
+
+output_dir: ${output_dir}
+
+collator_parameters:
+  max_input_length: ${datamodule.max_num_tokens_input}
+  max_output_length: ${datamodule.max_num_tokens_target}
+  padding: "longest"
+  truncation: True
+
+inference:
+  hf_generation_params:
+    num_beams: 10
+    num_return_sequences: ${.num_beams}
+
+    early_stopping: True
+
+    encoder_no_repeat_ngram_size: 0
+    no_repeat_ngram_size: 0
+
+    temperature: 1.0
+    length_penalty: 1.0
+    max_new_tokens: 56

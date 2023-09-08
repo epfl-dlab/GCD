@@ -1,0 +1,30 @@
+# @package datamodule
+defaults:
+  - /datamodule/_default@_here_
+
+
+task: "ED"
+name: "aquaint"
+
+dataset_target_: src.datamodules.ELInputDataset
+data_dir: ${data_dir}/ED/aquaint
+
+gzipped: False
+
+max_num_tokens_input: 2016 # 2048-32=2016
+max_num_tokens_target: 32
+
+dataset_parameters:
+  test:
+    dataset:
+      tokenizer: ${model.pretrained_model_name_or_path}
+      seed: ${seed}
+      prompter: # recursive instantiation: https://hydra.cc/docs/advanced/instantiate_objects/overview/#recursive-instantiation
+        _target_: src.prompting.prompter.Prompter.from_local
+        dir_path: ${assets_dir}/prompts/${datamodule.task}/stable
+        num_demo: 4
+      load_dataset_params:
+        path: ${datamodule.data_dir}/${datamodule.name}-test-kilt-short.jsonl
+        bounds:
+          text: ${datamodule.max_num_tokens_input}
+          target: ${datamodule.max_num_tokens_target}

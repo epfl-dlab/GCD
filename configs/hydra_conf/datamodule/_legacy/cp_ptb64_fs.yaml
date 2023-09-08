@@ -1,0 +1,22 @@
+defaults:
+  - _default
+
+name: "ptb64"
+
+
+
+dataset_target_: src.datamodules.CPInputDataset
+data_dir: ${data_dir}/cp
+
+
+
+gzipped: False
+
+max_num_tokens_input: 1920 # 2048-128=1920
+max_num_tokens_target: 64 # 256 will filter 576 over 2416 (23.8%)
+
+dataset_parameters:
+  test:
+    dataset:
+      load_dataset_params:
+        split: "ptb64-test-fs8" # overhead token num=443

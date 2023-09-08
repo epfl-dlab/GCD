@@ -1,0 +1,5 @@
+task: el
+instruction_type: canonical
+demo_type: canonical
+num_demo: 2
+dataset: aida

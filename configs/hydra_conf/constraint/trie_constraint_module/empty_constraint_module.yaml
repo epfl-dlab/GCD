@@ -1,0 +1,8 @@
+defaults:
+  - /constraint/trie_constraint_module/_from_constrained_world_default@_here_
+
+
+constrained_world_id: none # specifies the folder name from which the constrained world is loaded
+identifier: none # specifies the cache subfolder where the trie will be stored
+
+linearization_class_id: none

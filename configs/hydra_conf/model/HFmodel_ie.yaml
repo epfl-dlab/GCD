@@ -1,0 +1,8 @@
+defaults:
+  - ie_model
+  - HFmodel_default
+
+linearization_class_id: ${datamodule.linearization_class_id}
+
+
+_target_: src.models.IE_model.IEHFModelPL

@@ -1,0 +1,16 @@
+_target_: pytorch_lightning.Trainer
+
+# This is only for inference
+
+devices: ???
+max_steps: ???
+
+accelerator: "cuda"
+strategy: "fsdp_native"
+
+
+num_sanity_val_steps: 0
+
+precision: 16
+
+enable_progress_bar: True

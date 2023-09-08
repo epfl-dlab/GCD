@@ -1,0 +1,9 @@
+_target_: src.constrained_generation.GF_ConstrainedWithRenaming
+
+name : ${replace_slash:${.grammar_module}}
+
+grammar_module: ??? # name of the directory containing the PGF grammars
+
+default_grammar: ??? # name of the PGF grammar file to use by default
+
+grammar_dir: ${pgf_dir}

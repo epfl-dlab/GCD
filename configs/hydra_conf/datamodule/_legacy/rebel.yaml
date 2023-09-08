@@ -1,0 +1,13 @@
+defaults:
+  - _default
+
+name: "rebel"
+
+
+
+dataset_target_: src.datamodules.IEInputDataset
+data_dir: ${data_dir}/rebel
+
+
+apply_ordering_heuristic: False # Rebel is already ordered
+gzipped: True

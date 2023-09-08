@@ -1,0 +1,15 @@
+defaults:
+  - sdg_text_davinci_003_pc
+
+data_dir: ${data_dir}/ie/${.name}
+batch_size: 1
+
+
+apply_ordering_heuristic: False # We will load a dataset that is already ordered
+gzipped: False
+
+dataset_parameters:
+  test:
+    dataset:
+      load_dataset_params:
+        split: test_small_ordered_fs0_sc

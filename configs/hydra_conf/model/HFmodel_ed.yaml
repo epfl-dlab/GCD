@@ -1,0 +1,7 @@
+defaults:
+  - base_model
+  - HFmodel_default
+
+#_target_: src.models.ELHFModelPL
+
+_target_: src.models.ED_model.EDHFModelPL

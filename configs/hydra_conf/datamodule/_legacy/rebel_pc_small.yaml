@@ -1,0 +1,17 @@
+defaults:
+  - rebel
+
+data_dir: ${data_dir}/ie/${.name}
+
+
+apply_ordering_heuristic: True
+gzipped: False
+
+max_num_tokens_input: 1792 # 2048-256=1792
+max_num_tokens_target: 256
+
+dataset_parameters:
+  test:
+    dataset:
+      load_dataset_params:
+        split: "test_small-fs4-fe"

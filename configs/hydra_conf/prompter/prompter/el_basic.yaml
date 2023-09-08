@@ -1,0 +1,5 @@
+task: el
+instruction_type: basic
+demo_type: short
+num_demo: 2
+dataset: aida

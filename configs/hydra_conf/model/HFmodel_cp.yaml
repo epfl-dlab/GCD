@@ -1,0 +1,5 @@
+defaults:
+  - base_model
+  - HFmodel_default
+
+_target_: src.models.CP_model.CPHFModelPL

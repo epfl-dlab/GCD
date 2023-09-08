@@ -1,0 +1,10 @@
+defaults:
+  - override /datamodule: ???
+  - override /model: ???
+  - override /trainer: ???
+
+task: ???
+
+trainer:
+  accumulate_grad_batches: 1
+  max_steps: -1

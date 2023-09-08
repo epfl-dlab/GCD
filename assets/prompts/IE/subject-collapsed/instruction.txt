@@ -1,0 +1,1 @@
+Extract the triples in subject-collapsed format from texts below.

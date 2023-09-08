@@ -1,0 +1,3 @@
+_target_: pytorch_lightning.Trainer
+
+accelerator: "cpu"

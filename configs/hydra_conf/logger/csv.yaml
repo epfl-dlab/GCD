@@ -1,0 +1,6 @@
+# https://wandb.ai
+
+csv:
+  _target_: pytorch_lightning.loggers.CSVLogger
+  save_dir: ${output_dir}
+  name : csv_logs

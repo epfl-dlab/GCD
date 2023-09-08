@@ -1,0 +1,5 @@
+task: cp
+instruction_type: ptb
+demo_type: ptbM
+num_demo: 2
+dataset: ptbM

@@ -1,0 +1,23 @@
+# @package _global_
+
+defaults:
+  - /experiment/_default@_global_
+  - override /model: HFmodel_cp
+
+
+task: CP
+
+model:
+  inference:
+    verbose_flag_in_convert_to_triple: True
+    idx_of_return_sequence_as_output: 0
+    hf_generation_params:
+      max_new_tokens: 256 # we have set max_target_num_token=128. Here we set to 196 to avoid truncating, which may lead to inbalanced brackets
+      num_beams: 1
+      num_return_sequences: ${.num_beams}
+
+      early_stopping: True
+      no_repeat_ngram_size: 0
+
+      temperature: 1.0
+      length_penalty: 1.0

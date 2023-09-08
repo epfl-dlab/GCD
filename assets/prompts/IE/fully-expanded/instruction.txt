@@ -1,0 +1,1 @@
+Extract the triples in fully-expanded format from texts below.

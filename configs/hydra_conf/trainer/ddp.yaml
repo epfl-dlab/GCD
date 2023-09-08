@@ -1,0 +1,7 @@
+_target_: pytorch_lightning.Trainer
+
+devices: ???
+accelerator: "gpu"
+strategy: "ddp"
+replace_sampler_ddp: true
+enable_progress_bar: True

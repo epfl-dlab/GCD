@@ -1,0 +1,17 @@
+defaults:
+  - _default
+
+name: "sdg_text_davinci_003"
+
+batch_size: 4
+num_workers: 4
+
+dataset_target_: src.datamodules.IEInputDataset
+data_dir: ${data_dir}/sdg_text_davinci_003
+
+
+apply_ordering_heuristic: True
+gzipped: True
+
+max_num_tokens_input: 1792 # 2048-256=1792
+max_num_tokens_target: 256

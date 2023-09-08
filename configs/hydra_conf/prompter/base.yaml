@@ -1,0 +1,4 @@
+defaults:
+  - prompter: ie_text_sc_2
+
+dry_run: False

@@ -1,0 +1,41 @@
+data_dir: null # the specific dataset's local directory (if it applies)
+
+
+debug_k: null # number of examples to use for debugging
+
+top_k: null
+
+seed: ${seed}
+
+_target_: src.datamodules.DataModule
+batch_size: 1 # batch_size needs to be specified
+num_workers: 1 # num_workers needs to be specified
+
+max_num_tokens_input: 256
+max_num_tokens_target: 256
+
+gzipped: ???
+name: ???
+
+dataset_target_: null # the pytorch dataset class
+
+dataset_parameters:
+  test:
+    dataset:
+      _target_: ${datamodule.dataset_target_}
+      name: ${datamodule.name}
+      seed: ${datamodule.seed}
+      debug_k: ${datamodule.debug_k}
+
+      max_num_tokens_input: ${datamodule.max_num_tokens_input}
+      max_num_tokens_target: ${datamodule.max_num_tokens_target}
+
+      load_dataset_params:
+        split: "test"
+        n: ${datamodule.debug_k}
+        data_dir: ${datamodule.data_dir}
+        gzipped: ${datamodule.gzipped}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}

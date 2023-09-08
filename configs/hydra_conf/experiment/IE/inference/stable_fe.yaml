@@ -1,0 +1,23 @@
+# @package _global_
+
+defaults:
+  - /experiment/_default@_global_
+  - override /model: HFmodel_ie
+
+task: IE
+
+datamodule:
+  constrained_world: "genie_llama_tokenizeable"
+  linearization_class_id: "fully_expanded"
+  linearization_class_id_for_filtering: "fully_expanded"
+
+  verify_triplet_ordering: False
+
+
+model:
+  inference:
+    idx_of_return_sequence_as_output: 1
+    hf_generation_params:
+      max_new_tokens: 256
+      num_beams: 2
+      num_return_sequences: ${.num_beams}

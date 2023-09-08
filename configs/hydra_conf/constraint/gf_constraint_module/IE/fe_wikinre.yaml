@@ -1,0 +1,7 @@
+# @package constraint.gf_constraint_module
+defaults:
+  - /constraint/gf_constraint_module/_from_pgf_default@_here_
+
+grammar_module: "IE/fe/wikinre"
+
+default_grammar: "IE_fe_wikinre_0.pgf"

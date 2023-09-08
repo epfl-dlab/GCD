@@ -1,0 +1,7 @@
+task: ie
+instruction_type: sc
+demo_type: sc
+num_demo: 2
+dataset: text
+
+# overhead_token_num=153

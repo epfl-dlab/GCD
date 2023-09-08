@@ -1,0 +1,53 @@
+# @package datamodule
+defaults:
+#  - _default
+  - /datamodule/_default@_here_
+
+task: "IE"
+
+name: "ie_synthie_small_stable"
+
+cache_dir: ${data_dir}/.cache # The default is ~/.cache/huggingface/datasets
+
+
+constrained_world: "genie_llama_tokenizeable"
+constrained_worlds_dir: ${data_dir}/ie/constrained_worlds
+path_to_constrained_world_dir: null # this is not necessary if we have set the above two variables
+
+
+dataset_target_: src.datamodules.IEInputDataset
+data_dir: ${data_dir}/IE/synthie
+
+max_num_tokens_input: 1792 # 2048-256=1792
+max_num_tokens_target: 256
+
+apply_ordering_heuristic: False # We will load a dataset that is already ordered
+gzipped: False
+linearization_class_id: ???
+# update below to filter the datapoints based on a different linearization class for the target
+# useful to maintain comparable settings if we want to compare the performance of different linearization types
+linearization_class_id_for_filtering: ${datamodule.linearization_class_id}
+compute_frequency_dicts: False
+
+verify_triplet_ordering: False
+
+dataset_parameters:
+  test:
+    dataset:
+      constrained_world_id: ${datamodule.constrained_world}
+      path_to_constrained_world_dir: ${datamodule.path_to_constrained_world_dir}
+      constrained_worlds_dir: ${datamodule.constrained_worlds_dir}
+      linearization_class_id: ${datamodule.linearization_class_id}
+      linearization_class_id_for_filtering: ${datamodule.linearization_class_id_for_filtering}
+      tokenizer: ${model.pretrained_model_name_or_path}
+      prompter: # recursive instantiation: https://hydra.cc/docs/advanced/instantiate_objects/overview/#recursive-instantiation
+        _target_: src.prompting.prompter.Prompter.from_local
+        dir_path: ${assets_dir}/prompts/${datamodule.task}/stable
+        num_demo: 4
+      load_dataset_params:
+        path: ${datamodule.data_dir}/test_small_ordered.jsonl
+#        split: test_small_ordered
+        verify_triplet_ordering: ${datamodule.verify_triplet_ordering}
+        bounds:
+            text: ${datamodule.max_num_tokens_input}
+            target: ${datamodule.max_num_tokens_target}

@@ -1,0 +1,36 @@
+Perform constituency parsing on the provided sentences in accordance with the Penn TreeBank annotation guidelines.
+Let's look at your example: 'Mr. Roberts was assistant Treasury secretary under President Reagan'.
+The constituency parse tree is:
+( S ( NP-SBJ ( NNP Mr. ) ( NNP Roberts ) ) ( VP ( VBD was ) ( NP-PRD ( JJ assistant ) ( NNP Treasury ) ( NN secretary ) ) ( PP-LOC ( IN under ) ( NP ( NNP President ) ( NNP Reagan ) ) ) ) )
+S: This stands for Sentence, the top-level structure in the parse tree.
+NP-SBJ: This is the subject noun phrase of the sentence. In this case, it's 'Mr. Roberts'.
+VP: This stands for Verb Phrase, which is the part of the sentence that contains the verb and its direct and/or indirect objects, along with any other information. In this case, it's 'was assistant Treasury secretary under President Reagan'.
+VBD: This stands for Verb, Past Tense. The word 'was' falls into this category.
+NP-PRD: This is the predicate noun phrase. Here, it is 'assistant Treasury secretary'.
+JJ: This stands for Adjective. The word 'assistant' falls into this category.
+NNP: This stands for Proper Noun, Singular. 'Mr.', 'Roberts', 'Treasury', 'President', and 'Reagan' are all examples of this.
+NN: This stands for Noun, Singular or Mass. The word 'secretary' falls into this category.
+PP-LOC: This is a Prepositional Phrase that indicates location or direction. 'under President Reagan' falls into this category.
+IN: This stands for Preposition or Subordinating Conjunction. The word 'under' falls into this category.
+Now let's look at another example: 'Immune Response Corp. Three million common shares via Merrill Lynch'.
+The constituency parse tree is: ( NP ( NP ( NNP Immune ) ( NNP Response ) ( NNP Corp. ) ) ( NP ( QP ( CD Three ) ( CD million ) ) ( JJ common ) ( NNS shares ) ) ( PP ( IN via ) ( NP ( NNP Merrill ) ( NNP Lynch ) ) ) )
+NP: This stands for Noun Phrase. The sentence is composed of multiple nested Noun Phrases.
+NNP: This stands for Proper Noun, Singular. 'Immune', 'Response', 'Corp.', 'Merrill', and 'Lynch' are all examples of this.
+QP: This is a Quantifier Phrase, used to specify the quantity of something. Here, it is 'Three million'.
+CD: This stands for Cardinal Number, representing numbers that can be added together. 'Three' and 'million' fall into this category.
+JJ: This stands for Adjective. The word 'common' falls into this category.
+NNS: This stands for Noun, Plural. The word 'shares' falls into this category.
+PP: This stands for Prepositional Phrase, a modifying phrase consisting of a preposition and its object. Here, it is 'via Merrill Lynch'.
+IN: This stands for Preposition or Subordinating Conjunction. The word 'via' falls into this category.'
+Now let's look at another example: 'Bond prices were barely higher'.
+The constituency parse tree is: ( S ( NP-SBJ ( NN Bond ) ( NNS prices ) ) ( VP ( VBD were ) ( ADJP-PRD ( RB barely ) ( JJR higher ) ) ) )
+S: This stands for Sentence, the top-level structure in the parse tree.
+NP-SBJ: This is the subject noun phrase of the sentence, which is 'Bond prices'.
+NN: This stands for Noun, Singular or Mass. In this case, the word 'Bond' falls into this category.
+NNS: This stands for Noun, Plural. The word 'prices' is an example of this.
+VP: This stands for Verb Phrase, which in this case is 'were barely higher'.
+VBD: This stands for Verb, Past Tense. The word 'were' falls into this category.
+ADJP-PRD: This stands for Adjective Phrase, used as a predicate. The phrase 'barely higher' is an example of this.
+RB: This stands for Adverb. The word 'barely' falls into this category.
+JJR: This stands for Adjective, Comparative. The word 'higher' falls into this category.'
+Now let's look at some other examples:
