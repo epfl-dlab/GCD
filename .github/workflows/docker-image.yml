@@ -13,6 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: checkout code
+      uses: actions/checkout@v2 # here we use the v2 of the checkout action, it is the stable version from github
+    - name: Workaround for Disk Space #https://github.com/actions/runner-images/issues/2840
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+    - name: 'Create env file'
+      run: echo "${{ secrets.DOT_ENV }}" > .env
     - name: Build the Docker image
-      run: docker build . --file docker/Dockerfile --tag tmp:$(date +%s)
+      run: docker build . --file docker/Dockerfile --tag tmp:$(date +%s) --build-arg USER_NAME=geng --build-arg PROJECT_NAME=gcd --secret id=dot_env,src=.env

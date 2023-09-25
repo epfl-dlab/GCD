@@ -1,46 +1,16 @@
-# Choose a docker template
-# This will set what OS, CUDA, and perhaps even packages / python versions
-# you can preemptly have. You can find more templates in
+# Choose a docker template, with ARG you can set the base image from the command line
+# for example: docker build --build-arg BASE_IMAGE=xxx --build-arg USERNAME=xxx --build-arg PROJECT_NAME=xxx .
 ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:22.02-py3
 FROM $BASE_IMAGE
-ARG BASE_IMAGE
-RUN echo "Installing Apex on top of ${BASE_IMAGE}"
-# make sure we don't overwrite some existing directory called "apex"
-WORKDIR /tmp/unique_for_apex
-# uninstall Apex if present, twice to make absolutely sure :)
-RUN pip uninstall -y apex || :
-RUN pip uninstall -y apex || :
-# SHA is something the user can touch to force recreation of this Docker layer,
-# and therefore force cloning of the latest version of Apex
-RUN SHA=ToUcHMe git clone https://github.com/NVIDIA/apex.git
-WORKDIR /tmp/unique_for_apex/apex
-RUN pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" .
-WORKDIR /workspace
+ARG USER_NAME
+ARG PROJECT_NAME
 
-#################################################
-#
-# Don't change the above lines, otherwise you may get error with installing apex
-# I'm not sure about the error and don't want to spend time on it, so please don't change it
-# unless you know what you are doing
-#
-#################################################
-
-# use /bin/bash to execute the SHELL command, by default it is /bin/sh
-# -c means run the command and -u means fail if the command fails
-SHELL ["/bin/bash", "-cu"]
-
-# Setup your user profile with the right group permission to access NFS folder
-# For the command that gives the ids and names you would need checkout the .env file
-WORKDIR /
-
-# force recompile
-RUN echo "20230512" >/dev/null
-
-# install sudo
+# install sudo (necessary for adding a new user, see below)
 RUN apt update && \
     apt -y install sudo
 
-# create a new user and add it to the relevant groups, including sudo group
+# Setup your user profile with the right group permission to access NFS folder
+# For the command that gives the ids and names you would need checkout the .env file
 RUN --mount=type=secret,id=dot_env source /run/secrets/dot_env && \
      groupadd -g ${GROUP_ID1} ${GROUP_NAME1} && \
      groupadd -g ${GROUP_ID2} ${GROUP_NAME2} && \
@@ -49,14 +19,9 @@ RUN --mount=type=secret,id=dot_env source /run/secrets/dot_env && \
      echo -e "${USER_NAME}\n${USER_NAME}" | passwd ${USER_NAME}
 
 # Set some basic ENV vars for readability
-ENV USER_NAME="geng"
 ENV HOME=/home/${USER_NAME}
 ENV CONDA_PREFIX=${HOME}/.conda
 ENV CONDA=${CONDA_PREFIX}/condabin/conda
-
-# the repo name on github
-#ENV REPO=llama
-#ENV REPO_DIR=${HOME}/${REPO}
 
 # WORKDIR instruction sets the directory the following instructions should be run from
 WORKDIR ${HOME}
@@ -89,12 +54,10 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 #        project specific
 #
 ##############################################
-RUN echo "20230308" >/dev/null
-
 
 # Create conda environment and install requirements
-COPY requirements.txt .
-ENV ENV_NAME="gcd"
+COPY docker/requirements.txt .
+ENV ENV_NAME=${PROJECT_NAME}
 RUN ${CONDA} create -y -n ${ENV_NAME} python=3.9
 RUN ${CONDA} run --name ${ENV_NAME} pip install -r requirements.txt
 
