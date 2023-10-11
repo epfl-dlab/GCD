@@ -22,7 +22,7 @@ conda activate GCD
 
 Install the required packages:
 ```bash
-pip install -r pip_requirements.txt
+pip install -r requirements.txt
 ```
 
 ## 3. Downloading the dataset, grammar objects and models
