@@ -4,7 +4,7 @@
 model="${1:-saibo/llama-1B}" # set default to 1B
 #n_device="$4"      # Options: 1, 1, 2, 3, "1,2"
 format="${2:-fe}" # Options: fe, sc, feR, scR
-debug_k="${3}"  # Options: 1, 2, 4, 8, 16, 32, 64, 128, 256
+debug_k="${3:-16}"  # Options: 1, 2, 4, 8, 16, 32, 64, 128, 256
 
 # Compute linearization from format
 linearize="${format:0:2}"

@@ -25,36 +25,12 @@ Install the required packages:
 pip install -r requirements.txt
 ```
 
-## 3. Downloading the dataset, grammar objects and models
+## Experiments
 
-check the [docs/download_data.md](docs/download_data.md) for instructions on how to download them.
-
-
-## 4. Build task-specific grammars
-
-c.f.  [GF_helper repo](https://github.com/Saibo-creator/GF_helper)
-
-
-## Running the experiments
-
-```shell
-# run the experiments for the CP task
-bash run_CP.sh
-
-# run the experiments for the IE task
-bash run_IE.sh
-
-# run the experiments for the ED task
-bash run_ED.sh
-```
-
-
-The generated prediction sequences will be logged to [Weights and Biases](https://wandb.ai/site).
-
-
-## Developer Guide
-
-If you want to extend the codebase, please check the [docs/developer_guide.md](docs/developer_guide.md) for more details.
+- [Download datasets, grammars and models](docs/download_data.md)
+- [Build task-specific grammars](https://github.com/Saibo-creator/GF_helper)
+- [Windows-specific setting](docs/windows.md)
+- [Running the experiments](docs/run_experiments.md)
 
 
 ## Citation

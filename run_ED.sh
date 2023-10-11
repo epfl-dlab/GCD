@@ -24,7 +24,7 @@ for ds in aquaint msnbc ace2004 wiki aida clueweb; do
         datamodule="$datamodule_option" \
         trainer="$trainer_option" \
         model="$model_option" \
-        +constraint/gf_constraint_module/ED@model.gf_constraint_module=canonical_aida \
+        +constraint/gf_constraint_module/ED@model.gf_constraint_module=canonical \
         model.pretrained_model_name_or_path="$HF_MODELS_DIR/$model" \
         model.half_precision=false \
         model.gf_constraint_module.grammar_module="$grammar_module" \

@@ -39,4 +39,4 @@ logs_subfolder: inference
 # determines the log directory's identifier
 #run_name: ???
 
-run_name: Task_${task}_Model_${model.name}_Datamodule_${datamodule.name}_Constraint_${model.gf_constraint_module.name}
+run_name: Task_${task}_Model_${model.name}_Datamodule_${datamodule.name}_Constraint_${oc.select:model.gf_constraint_module.name,null}
