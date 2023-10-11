@@ -22,5 +22,5 @@ python run_inference.py \
     +constraint/gf_constraint_module/CP@model.gf_constraint_module="$gf_constraint_module_option" \
     model.pretrained_model_name_or_path="$HF_MODELS_DIR/$model" \
     model.half_precision=false \
-    datamodule.debug_k=2 \
+    datamodule.debug_k=16 \
     logger.wandb.offline=false

@@ -1,0 +1,49 @@
+ApiVersion: run.ai/v1
+kind: RunaiJob
+metadata:
+  name: JOBTEST
+  labels:
+    priorityClassName: "build" # Interactive Job if present, for Train Job REMOVE this line
+    user: GASPAR_NAME
+spec:
+  template:
+    metadata:
+      labels:
+        user: GASPAR:NAME # User e.g. firstname.lastname
+    spec:
+      hostIPC: true
+      schedulerName: runai-scheduler
+      restartPolicy: Never
+      securityContext:
+        runAsUser: UID # insert uid found in people.epfl in admistrative data
+        runAsGroup: GID # insert gid as found in people.epfl in admistrative data
+        fsGroup: GID
+      containers:
+      - name: container-name
+        image: ic-registry.epfl.ch/LAB/FOLDER/IMAGE:VERSION
+        workingDir : /PATH/TO/WORKINGDIR
+        command: ["/bin/bash"]
+        args:
+        - "-c"
+        - "SOME COMMANDS TO EXECUTE && SOME OTHER COMMANDES TO EXECUTE"
+
+        env:
+          - name: HOME
+            value: "/PATH/TO/HOMEDIR"
+          - name: PYTHONPATH
+            value: "/PATH/TO/PYLIB1:/PATH/TO/PYLIB2:/PATH/TO/PYLIB3"
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        volumeMounts:
+          - mountPath: /MOUNTPATH1
+            name: VOLUME_NAME1
+          - mountPath: /MOUNTPATH2
+            name: VOLUME_NAME2
+      volumes:
+        - name: VOLUME_NAME1
+          persistentVolumeClaim:
+            claimName: runai-pv-VOLUME1
+        - name: VOLUME_NAME2
+          persistentVolumeClaim:
+            claimName: runai-pv-VOLUME2

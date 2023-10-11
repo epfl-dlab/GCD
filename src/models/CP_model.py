@@ -1,6 +1,7 @@
 from typing import Any, Dict, Union, List, Optional
 from typing import Any, Dict
 
+import PYEVALB
 from PYEVALB import parser
 from PYEVALB import scorer
 from omegaconf import OmegaConf
@@ -63,7 +64,7 @@ class CPHFModelPL(HFModelPL):
     def parse(line:str) -> Optional[Any]:
         try:
             structured_prediction:Optional[Any] = parser.create_from_bracket_string(line)
-        except AttributeError or parser.ParsingError:
+        except (AttributeError, parser.ParsingError, IndexError, PYEVALB.scorer.LengthUnmatch):
             structured_prediction = None
         return structured_prediction
 

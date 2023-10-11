@@ -3,9 +3,11 @@
 
 ## Download data for the experiments
 
+At the root of the repository, run the following command to download the data files
 ```bash
 git lfs install
 git clone https://huggingface.co/datasets/saibo/GCD-data-v2
+mv GCD-data-v2 data
 ```
 
 
@@ -18,7 +20,7 @@ git lfs install
 git clone https://huggingface.co/datasets/saibo/GCD-grammar-v2 assets/pgf
 ```
 
-Unzip the files
+Unzip the compressed grammar files
 ```bash
 cd assets/pgf
 # unzip and remove the zip files
@@ -45,5 +47,7 @@ Then, we set the environment variable `HF_MODELS_DIR` to `~/models` by running t
 ```bash
 export HF_MODELS_DIR=~/models
 ```
+
+The models such as LLAMA-7B need to be in HuggingFace format.
 
 We don't provide other model weights as they are too large and may have licensing issues.

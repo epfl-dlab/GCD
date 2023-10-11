@@ -15,11 +15,10 @@ repos:
     -   id: check-docstring-first # Checks for a common error of placing code before the docstring.
     -   id: check-executables-have-shebangs # Checks that executable files have a shebang.
     -   id: detect-private-key # Detects the presence of private keys.
-#-   repo: https://github.com/ambv/black # automatic format code style
-#    rev: 22.3.0
-#    hooks:
-#    -   id: black
-
+-   repo: https://github.com/ambv/black # automatic format code style
+    rev: 22.3.0
+    hooks:
+    -   id: black
 -   repo: local
     hooks:
         -   id: unittest
