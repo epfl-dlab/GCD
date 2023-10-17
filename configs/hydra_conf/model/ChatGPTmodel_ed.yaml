@@ -1,0 +1,4 @@
+defaults:
+  - ChatGPTmodel_default
+
+_target_: src.models.ChatGPT_ED_Model.ChatGPT_ED_Model

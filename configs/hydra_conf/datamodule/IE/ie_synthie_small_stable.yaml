@@ -11,7 +11,7 @@ cache_dir: ${data_dir}/.cache # The default is ~/.cache/huggingface/datasets
 
 
 constrained_world: "genie_llama_tokenizeable"
-constrained_worlds_dir: ${data_dir}/ie/constrained_worlds
+constrained_worlds_dir: ${data_dir}/IE/constrained_worlds
 path_to_constrained_world_dir: null # this is not necessary if we have set the above two variables
 
 
