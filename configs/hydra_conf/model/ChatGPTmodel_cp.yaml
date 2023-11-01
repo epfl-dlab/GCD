@@ -1,0 +1,4 @@
+defaults:
+  - ChatGPTmodel_default
+
+_target_: src.models.ChatGPT_CP_Model.ChatGPT_CP_Model

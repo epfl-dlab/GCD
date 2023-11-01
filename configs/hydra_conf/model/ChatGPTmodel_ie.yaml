@@ -1,0 +1,6 @@
+defaults:
+  - ChatGPTmodel_default
+
+linearization_class_id: ${datamodule.linearization_class_id}
+
+_target_: src.models.ChatGPT_IE_Model.ChatGPT_IE_Model
