@@ -1,6 +1,7 @@
 from typing import Any, Dict, Union, List, Optional
 from typing import Any, Dict
 
+import PYEVALB
 from PYEVALB import parser
 from PYEVALB import scorer
 from omegaconf import OmegaConf
@@ -15,7 +16,6 @@ from src.utils.evaluation_helpers import (
 from src.utils.hf_gen_utils import get_first_no_empty_generation
 
 log = utils.get_only_rank_zero_logger(__name__)
-
 from src.models.ChatGPTModel import ChatGPTModel
 
 
@@ -64,14 +64,18 @@ class ChatGPT_CP_Model(ChatGPTModel):
     def parse(line:str) -> Optional[Any]:
         try:
             structured_prediction:Optional[Any] = parser.create_from_bracket_string(line)
-        except AttributeError or parser.ParsingError:
+        except (AttributeError, parser.ParsingError, IndexError, PYEVALB.scorer.LengthUnmatch): ## error is not raised here
             structured_prediction = None
         return structured_prediction
 
     def score(self, gold_tree, test_tree):
         if gold_tree is None or test_tree is None:
             return None
-        return self.evalb_scorer.score_trees(gold_tree, test_tree)
+        try:
+            score = self.evalb_scorer.score_trees(gold_tree, test_tree) ## it is raised here
+        except (PYEVALB.scorer.LengthUnmatch):
+            score = None
+        return score
 
     def _get_structured_prediction(self, outputs: Dict[str, List[Any]]) -> List[Optional[str]]:
         """

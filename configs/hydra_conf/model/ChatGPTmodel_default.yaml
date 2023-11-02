@@ -3,7 +3,9 @@ _target_: src.models.ChatGPTModel
 
 half_precision: True
 
-name: ${.pretrained_model_name_or_path}
+name: ??? # local path to the model, should be specified at runtime
+
+endpoint_name: ??? #endpoint name, should be specified at runtime
 
 pretrained_model_name_or_path: ??? # local path to the model, should be specified at runtime
 

@@ -37,6 +37,8 @@ class ChatGPTModel(pl.LightningModule):
         super().__init__()
         # equivalent to self.hparams = config
         self.save_hyperparameters(params)
+        self.model_type = params.name
+        self.endpoint_name = params.endpoint_name
         openai.api_key = params.openai_api_key
         #self._init_constraint_module()
         #self._init_model_and_tokenizer()
@@ -70,13 +72,21 @@ class ChatGPTModel(pl.LightningModule):
             
     @retry(wait=wait_random(min=5, max=60))
     def _api_request(self,prompt,**kwargs):
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt},
-            ],
-            **kwargs)
-        return response['choices'][0]['message']['content']
+        if self.endpoint_name == "chat_completion":
+            response = openai.ChatCompletion.create(
+                model=self.model_type,
+                messages=[
+                    {"role": "user", "content": prompt},
+                ],
+                **kwargs)
+            return response['choices'][0]['message']['content']
+
+        elif self.endpoint_name == "completion":
+            response = openai.Completion.create(
+                model=self.model_type,
+                prompt=prompt,
+                **kwargs)
+            return response['choices'][0]['text']
     
     def _call_openai(self, prompts,**kwargs):
         responses = []

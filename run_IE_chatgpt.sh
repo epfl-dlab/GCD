@@ -1,11 +1,11 @@
 #! /usr/bin/bash
 
 # Command-line arguments
-model="gpt-3.5-turbo" # set default to 1B
+name="davinci-002" # set default to 1B
 #n_device="$4"      # Options: 1, 1, 2, 3, "1,2"
 format="${2:-fe}" # Options: fe, sc, feR, scR
 debug_k="${3}"  # Options: 1, 2, 4, 8, 16, 32, 64, 128, 256
-
+endpoint_name="completion"
 # Compute linearization from format
 linearize="${format:0:2}"
 
@@ -33,9 +33,10 @@ do
         model.half_precision=false \
         model.pretrained_model_name_or_path="/dlabdata1/llama_hf/1B/" \
         model.openai_api_key="$API_KEY" \
+        model.name="$name" \
+        model.endpoint_name="$endpoint_name" \
         datamodule.debug_k="$debug_k" \
         logger.wandb.offline=false \
-        datamodule.debug_k=256 \
         hydra.verbose=false
         # --cfg job --resolve
         # Additional options (uncomment if needed):
