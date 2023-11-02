@@ -2,7 +2,9 @@ from typing import List
 
 from src import utils
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 def unflatten_generations(generations: List[str], bs: int=None, num_beams: int=None) -> List[List[str]]:

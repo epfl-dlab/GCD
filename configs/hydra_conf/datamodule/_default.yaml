@@ -18,6 +18,9 @@ gzipped: ???
 name: ???
 
 dataset_target_: null # the pytorch dataset class
+tokenizer: ${model.pretrained_model_name_or_path}
+
+prompter: stable # the name of the prompter to use
 
 dataset_parameters:
   test:
@@ -25,6 +28,7 @@ dataset_parameters:
       _target_: ${datamodule.dataset_target_}
       name: ${datamodule.name}
       seed: ${datamodule.seed}
+      tokenizer: ${datamodule.tokenizer}
       debug_k: ${datamodule.debug_k}
 
       max_num_tokens_input: ${datamodule.max_num_tokens_input}

@@ -12,7 +12,9 @@ from src.utils.evaluation_helpers import (
 )
 from src.utils.hf_gen_utils import get_first_no_empty_generation
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 from src.models.HFModelPL import HFModelPL
 
 
@@ -28,7 +30,10 @@ class EDHFModelPL(HFModelPL):
     def test_step_end(self, outputs: Dict[Any, Any]):
         outputs = super().test_step_end(outputs)
 
-        structured_predictions = outputs["structured_predictions"]
+        final_predictions = outputs["final_predictions"]
+        structured_predictions = [
+            extract_string_in_bracket(texts) for texts in final_predictions
+        ]
         structured_targets = outputs["targets"]
 
         _correct = [pred == target for pred, target in zip(structured_predictions, structured_targets)]
@@ -46,14 +51,11 @@ class EDHFModelPL(HFModelPL):
         # Log the output
         log.debug(f"predictions: {structured_predictions}, targets: {structured_targets}")
 
+    def _get_final_prediction(self, outputs: Dict[str, List[Any]]):
+        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["candidate_predictions"])
 
-    def _get_structured_prediction(self, outputs: Dict[str, List[Any]]):
-        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["unflattened_predictions"])
-
-        structured_prediction = [
-            extract_string_in_bracket(texts) for texts in first_no_empty_generations
-        ]
-        return structured_prediction
+        final_predictions = first_no_empty_generations
+        return final_predictions
 
     def test_epoch_end(self, outputs):
         """Outputs is a list of test_step outputs"""

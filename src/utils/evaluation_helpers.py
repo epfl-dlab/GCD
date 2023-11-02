@@ -14,7 +14,9 @@ from pytorch_lightning.loggers import LoggerCollection, WandbLogger
 from pytorch_lightning.utilities import rank_zero_only
 from .general_helpers import unflatten_dict
 from .. import utils
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 @rank_zero_only

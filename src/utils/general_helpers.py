@@ -19,7 +19,9 @@ from pytorch_lightning.utilities import rank_zero_only
 from src import utils
 from importlib.util import find_spec
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 def run_task(cfg: DictConfig, run_func: Callable) -> None:
