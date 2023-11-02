@@ -11,7 +11,9 @@ from src.utils.evaluation_helpers import (
 )
 from src.utils.hf_gen_utils import get_first_no_empty_generation
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 from src.models.HFModelPL import HFModelPL
 
 
@@ -43,7 +45,7 @@ class IEHFModelPL(HFModelPL):
                 verbose=self.hparams.inference.get("verbose_flag_in_convert_to_triple"),
                 return_set=True,
             )
-            for text in outputs["structured_predictions"]
+            for text in outputs["final_predictions"]
         ]
         structured_targets = [
             self.linearization_class.text_to_triplet_list(
@@ -87,11 +89,11 @@ class IEHFModelPL(HFModelPL):
 
         return outputs
 
-    def _get_structured_prediction(self, outputs: Dict[str, List[Any]]):
-        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["unflattened_predictions"])
+    def _get_final_prediction(self, outputs: Dict[str, List[Any]]):
+        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["candidate_predictions"])
 
-        structured_predictions = first_no_empty_generations
-        return structured_predictions
+        final_predictions = first_no_empty_generations
+        return final_predictions
 
     def test_epoch_end(self, outputs):
         """Outputs is a list of test_step outputs"""

@@ -22,7 +22,9 @@ from src.utils.hf_model_utils import get_hf_model_short_name
 # wandb.init(reinit=True, mode="online")
 
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 def run_inference(cfg: DictConfig):

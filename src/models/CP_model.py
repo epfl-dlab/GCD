@@ -15,7 +15,9 @@ from src.utils.evaluation_helpers import (
 )
 from src.utils.hf_gen_utils import get_first_no_empty_generation
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 from src.models.HFModelPL import HFModelPL
 
 
@@ -73,23 +75,23 @@ class CPHFModelPL(HFModelPL):
             return None
         return self.evalb_scorer.score_trees(gold_tree, test_tree)
 
-    def _get_structured_prediction(self, outputs: Dict[str, List[Any]]) -> List[Optional[str]]:
+    def _get_final_prediction(self, outputs: Dict[str, List[Any]]) -> List[Optional[str]]:
         """
         This function is used to get the structured prediction in a string format from the outputs of the model.
         N.B. the output is supposed to be a list of strings, each string is a structured prediction that can be further processed.
         For example, in the case of a constituency parsing task, the output is only cleaned from the spaces and the brackets.
         The parsing is done in the test_step_end function.
         """
-        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["unflattened_predictions"])
+        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["candidate_predictions"])
 
-        structured_prediction: List[Optional[str]] = [rm_space_ptb(extract_string_in_bracket(text)) for text in first_no_empty_generations]
-        return structured_prediction
+        final_predictions: List[Optional[str]] = [rm_space_ptb(extract_string_in_bracket(text)) for text in first_no_empty_generations]
+        return final_predictions
 
     def test_step_end(self, outputs: Dict[Any, Any]):
         outputs = super().test_step_end(outputs)
 
         structured_targets: List[Optional[str]] = [self.parse(rm_space_ptb(target)) for target in outputs["targets"]]
-        structured_predictions: List[Optional[str]] = [self.parse(pred) for pred in outputs["structured_predictions"]]
+        structured_predictions: List[Optional[str]] = [self.parse(pred) for pred in outputs["final_predictions"]]
 
         # Update the metrics
         for i in range(len(structured_predictions)):

@@ -22,7 +22,9 @@ from src.utils.dict_utils import dict_of_lists_to_list_of_dicts
 from src.utils.file_io import auto_write_text
 from src.utils.generic_text_collator import GenericTextCollator
 
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 class HFModelPL(pl.LightningModule):
@@ -240,22 +242,22 @@ class HFModelPL(pl.LightningModule):
             "ids": ids,
             "inputs": raw_input,
             "targets": raw_target,
-            "unflattened_predictions": sample_output["grouped_decoded_sequences"],
+            "candidate_predictions": sample_output["grouped_decoded_sequences"],
         }
 
     def test_step_end(self, outputs: Dict[str, List[Any]]):
-        structured_prediction: List[Any] = self._get_structured_prediction(outputs)
+        final_predictions: List[Any] = self._get_final_prediction(outputs)
 
-        outputs["structured_predictions"] = structured_prediction
+        outputs["final_predictions"] = final_predictions
 
         if self.hparams.output_dir:
             self._write_step_output(step_output=outputs)
 
         return outputs
 
-    def _get_structured_prediction(self, outputs: Dict[str, List[Any]]):
-        structured_prediction: List[Any] = [predictions[0] for predictions in outputs["unflattened_predictions"]]
-        return structured_prediction
+    def _get_final_prediction(self, outputs: Dict[str, List[Any]]):
+        final_predictions: List[Any] = [predictions[0] for predictions in outputs["candidate_predictions"]]
+        return final_predictions
 
     def _get_predictions_dir_path(self, output_dir=None, create_if_not_exists=True):
         output_dir = output_dir or self.hparams.output_dir

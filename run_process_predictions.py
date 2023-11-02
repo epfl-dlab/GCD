@@ -18,7 +18,9 @@ from src.utils.evaluation_helpers import Results
 from src import utils
 
 DEBUG = False
-log = utils.get_only_rank_zero_logger(__name__)
+log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 def get_score_from_metric(

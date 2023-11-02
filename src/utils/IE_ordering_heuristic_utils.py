@@ -10,7 +10,9 @@ from src.utils.general_helpers import read_jsonlines, write_jsonlines
 if __name__ == "__main__":
     log = utils.get_only_rank_zero_logger(__name__, stdout=True)
 else:
-    log = utils.get_only_rank_zero_logger(__name__)
+    log = utils.get_only_rank_zero_logger(__name__, stdout=True)
+import logging
+log.setLevel(logging.INFO)
 
 
 def get_data(data_dir, split):
