@@ -69,5 +69,3 @@ But as the model is randomly initialized, the results will be meaningless.
 You can check the results of the experiments without constraints by removing the constraints flags in the scripts.
 
 For example, remove `+constraint/gf_constraint_module/CP@model.gf_constraint_module="$gf_constraint_module_option"` in `run_CP.sh` will run the experiments without constraints.
-
-
