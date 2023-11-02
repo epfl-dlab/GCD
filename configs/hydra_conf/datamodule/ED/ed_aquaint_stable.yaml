@@ -17,11 +17,11 @@ max_num_tokens_target: 32
 dataset_parameters:
   test:
     dataset:
-      tokenizer: ${model.pretrained_model_name_or_path}
+
       seed: ${seed}
       prompter: # recursive instantiation: https://hydra.cc/docs/advanced/instantiate_objects/overview/#recursive-instantiation
         _target_: src.prompting.prompter.Prompter.from_local
-        dir_path: ${assets_dir}/prompts/${datamodule.task}/stable
+        dir_path: ${assets_dir}/prompts/${datamodule.task}/${datamodule.prompter}
         num_demo: 4
       load_dataset_params:
         path: ${datamodule.data_dir}/${datamodule.name}-test-kilt-short.jsonl

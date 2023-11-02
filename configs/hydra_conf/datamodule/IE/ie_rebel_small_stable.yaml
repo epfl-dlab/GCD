@@ -37,10 +37,10 @@ dataset_parameters:
         constrained_worlds_dir: ${datamodule.constrained_worlds_dir}
         linearization_class_id: ${datamodule.linearization_class_id}
         linearization_class_id_for_filtering: ${datamodule.linearization_class_id_for_filtering}
-        tokenizer: ${model.pretrained_model_name_or_path}
+
         prompter: # recursive instantiation: https://hydra.cc/docs/advanced/instantiate_objects/overview/#recursive-instantiation
           _target_: src.prompting.prompter.Prompter.from_local
-          dir_path: ${assets_dir}/prompts/${datamodule.task}/stable
+          dir_path: ${assets_dir}/prompts/${datamodule.task}/${datamodule.prompter}
           num_demo: 4
         seed: ${seed}
         load_dataset_params:
