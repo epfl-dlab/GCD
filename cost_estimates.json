@@ -1,0 +1,216 @@
+{
+    "ED": {
+        "aquaint": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 0.24716049999999998,
+                "Cost Error": 0.0012832138814080553
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 5.07747,
+                "Cost Error": 0.01363499999999984
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 0.24666549999999998,
+                "Cost Error": 0.0009132319407040236
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 0.24666549999999998,
+                "Cost Error": 0.0009132319407040236
+            },
+            "davinci-002": {
+                "Cost Estimate": 0.323587,
+                "Cost Error": 0.0010020416900857962
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 3.23587,
+                "Cost Error": 0.010020416900857962
+            }
+        },
+        "msnbc": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 0.228148,
+                "Cost Error": 0.0008929102703180592
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 4.718459999999999,
+                "Cost Error": 0.01331745926052706
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 0.228363,
+                "Cost Error": 0.0007131627895011477
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 0.228363,
+                "Cost Error": 0.0007131627895011477
+            },
+            "davinci-002": {
+                "Cost Estimate": 0.299659,
+                "Cost Error": 0.0008025377895011465
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 2.99659,
+                "Cost Error": 0.008025377895011464
+            }
+        },
+        "ace2004": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 0.08336299999999999,
+                "Cost Error": 0.00041793813446252686
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 1.72518,
+                "Cost Error": 0.008475000000000017
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 0.083475,
+                "Cost Error": 0.00038009406723126383
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 0.083475,
+                "Cost Error": 0.00038009406723126383
+            },
+            "davinci-002": {
+                "Cost Estimate": 0.109556,
+                "Cost Error": 0.0004403440672312636
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 1.09556,
+                "Cost Error": 0.004403440672312636
+            }
+        },
+        "wiki": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 2.4386295000000002,
+                "Cost Error": 0.004916092005150844
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 50.58405,
+                "Cost Error": 0.05853854146334727
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 2.4400955,
+                "Cost Error": 0.003641244311335065
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 2.4400955,
+                "Cost Error": 0.003641244311335065
+            },
+            "davinci-002": {
+                "Cost Estimate": 3.1955220000000004,
+                "Cost Error": 0.004054242917403272
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 31.95522,
+                "Cost Error": 0.04054242917403271
+            }
+        },
+        "aida": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 1.6095155000000003,
+                "Cost Error": 0.0023683098208450303
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 33.18633,
+                "Cost Error": 0.05560066391991928
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 1.6095155000000003,
+                "Cost Error": 0.0023683098208450303
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 1.6095155000000003,
+                "Cost Error": 0.0023683098208450303
+            },
+            "davinci-002": {
+                "Cost Estimate": 2.11282,
+                "Cost Error": 0.0028832641776927515
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 21.128200000000003,
+                "Cost Error": 0.028832641776927518
+            }
+        },
+        "clueweb": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 3.9119765,
+                "Cost Error": 0.004053525163158864
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 81.27105811153358,
+                "Cost Error": 0.10968268240799443
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 3.9248737479932405,
+                "Cost Error": 0.004282568485545513
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 3.9248737479932405,
+                "Cost Error": 0.004282568485545513
+            },
+            "davinci-002": {
+                "Cost Estimate": 5.151768360794255,
+                "Cost Error": 0.0049705076426484465
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 51.51768360794254,
+                "Cost Error": 0.04970507642648445
+            }
+        }
+    },
+    "IE": {
+        "synthie": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 0.8340929422455574,
+                "Cost Error": 0.0019821947612032884
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 18.440697697899836,
+                "Cost Error": 0.055245879697323086
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 0.838169073101777,
+                "Cost Error": 0.001927596772808826
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 0.8451515044426495,
+                "Cost Error": 0.0025278411579872967
+            },
+            "davinci-002": {
+                "Cost Estimate": 1.1632277867528271,
+                "Cost Error": 0.005573553935147402
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 11.335486672051697,
+                "Cost Error": 0.021522827660207466
+            }
+        }
+    },
+    "CP": {
+        "ptb64": {
+            "gpt-3.5-turbo-0613": {
+                "Cost Estimate": 0.30028475000000004,
+                "Cost Error": 0.0015092969985878685
+            },
+            "gpt-4-0613": {
+                "Cost Estimate": 6.1243038,
+                "Cost Error": 0.04335860995763603
+            },
+            "gpt-3.5-turbo-0301": {
+                "Cost Estimate": 0.30028475000000004,
+                "Cost Error": 0.0015092969985878685
+            },
+            "gpt-3.5-turbo-instruct-0914": {
+                "Cost Estimate": 0.30028475000000004,
+                "Cost Error": 0.0015092969985878685
+            },
+            "davinci-002": {
+                "Cost Estimate": 0.39642604000000004,
+                "Cost Error": 0.0015733069985878693
+            },
+            "text-davinci-003": {
+                "Cost Estimate": 3.9642604000000006,
+                "Cost Error": 0.015733069985878693
+            }
+        }
+    }
+}

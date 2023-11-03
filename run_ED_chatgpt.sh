@@ -6,7 +6,7 @@ name="gpt-3.5-turbo" # set default to 1B
 # Uncomment if you want to export LLAMA_DIR
 # export LLAMA_DIR="$LLAMA_DIR"
 # Experiment configuration
-debug_k="${2}"
+debug_k="${32}"
 exp_option=stable  # beam = 4
 trainer_option="${2:-cpu}" # set default to cpu
 model_option=ChatGPTmodel_ed
@@ -14,7 +14,7 @@ model_option=ChatGPTmodel_ed
 for name in gpt-3.5-turbo-0301; 
 do
     endpoint_name="chat_completion"
-    for ds in msnbc ace2004; 
+    for ds in aquaint msnbc ace2004 wiki aida clueweb;
     do
         datamodule_option="ED/ed_${ds}_stable"
         grammar_module="ED/canonical/$ds"
@@ -35,14 +35,15 @@ do
             model.endpoint_name="$endpoint_name" \
             model.name="$name"\
             logger.wandb.offline=false \
-            hydra.verbose=false 
+            hydra.verbose=false\
+            datamodule.debug_k=128
     done
 done
 
 for name in gpt-3.5-turbo-instruct-0914 text-davinci-003 davinci-002; 
     do
     endpoint_name="completion"
-    for ds in msnbc ace2004; 
+    for ds in aquaint msnbc ace2004 wiki aida clueweb;
     do
         datamodule_option="ED/ed_${ds}_stable"
         grammar_module="ED/canonical/$ds"
@@ -63,6 +64,7 @@ for name in gpt-3.5-turbo-instruct-0914 text-davinci-003 davinci-002;
             model.endpoint_name="$endpoint_name" \
             model.name="$name"\
             logger.wandb.offline=false \
-            hydra.verbose=false
+            hydra.verbose=false\
+            datamodule.debug_k=128
     done
 done

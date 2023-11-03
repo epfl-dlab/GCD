@@ -1,12 +1,12 @@
 #! /usr/bin/bash
 
 # Model selection
-model="gpt-3.5-turbo" # set default to 1B
+name="gpt-3.5-turbo-0613" # set default to 1B
 
 # Task and experiment options
 task_option="cp"
 exp_option="stable"  # beam = 4
-endpoint_name="completion"
+endpoint_name="chat_completion"
 
 # Model and training configurations
 model_option="ChatGPTmodel_cp"
@@ -26,5 +26,6 @@ python run_inference.py \
     logger.wandb.offline=false \
     model.openai_api_key="$API_KEY" \
     model.endpoint_name="$endpoint_name" \
-    model.name = "$model"\
+    model.name="$name"
+
 
