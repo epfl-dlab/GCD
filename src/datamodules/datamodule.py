@@ -7,7 +7,6 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import Dataset, DataLoader
 
 from src import utils
-from src.prompting.prompter import Prompter
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
 

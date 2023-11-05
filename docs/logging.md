@@ -3,18 +3,34 @@
 
 #### How to to see debug logs?
 
-You need to set the logging level to `logging.DEBUG`
+The most straightforward way is to enable debug logs for the entire project via hydra.
 
+```bash
+hydra.verbose=true
+```
 
+However, this will print a lot of logs from other libraries such as `urllib3` and `openai`.
+
+To enable debug logs only for the project, you need to do the following:
+
+```bash
+hydra.verbose=[src]
+```
+
+This will enable debug logs for the `src` modul, i.e. the entire project.
+
+Check [here](https://hydra.cc/docs/tutorials/basic/running_your_app/logging/) for more details.
+
+#### How to enable debug logs without hydra?
 
 In the main script, add the following lines:
 
 ```python
 import logging
 
-logging.getLogger('src.models').setLevel(logging.DEBUG)
+logging.getLogger('src').setLevel(logging.DEBUG)
 ```
-This will enable debug logs for the `src.models` module.
+This will enable debug logs for the `src` module.
 You can surely enable debug logs for other modules or submodules.
 
 

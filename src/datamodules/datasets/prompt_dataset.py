@@ -11,5 +11,5 @@ class PromptDataset(FilteredTextDataset):
 
     def _preprocess_data_point(self, dp: Dict, **kwargs) -> Dict:
         if self.prompter is not None:
-            dp["text"] = self.prompter.materialize(runtime_input=dp["text"], **kwargs)
+            dp["text"] = self.prompter.materialize(runtime_input=dp, **kwargs)
         return dp
