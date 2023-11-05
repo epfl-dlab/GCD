@@ -21,7 +21,7 @@
     },
     {
         "text": "Marcus Jacob Monrad was a Lutheran who passed away in Oslo and was buried in the Cemetery of Our Saviour.Marcus Jacob Monrad was a Lutheran who passed away in Oslo and was buried in the Cemetery of Our Saviour.",
-        "output": "[s] Marcus_Jacob_Monrad [r] place of death [o] object  [r] place of burial [o] Cemetery_of_Our_SaviourCemetery_of_Our_Saviour [r] religion [o] Lutheranism [e]"
+        "output": "[s] Marcus_Jacob_Monrad [r] place of death [o] object  [r] place of burial [o] Cemetery_of_Our_Saviour [r] religion [o] Lutheranism [e]"
     },
     {
         "text": "The Making of Maddalena was shot by James Van Trees as director of photography and is presented in black and white. The cast includes Edna Goodrich.",

@@ -3,11 +3,12 @@ from typing import List
 from src import utils
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
 
 
-def unflatten_generations(generations: List[str], bs: int=None, num_beams: int=None) -> List[List[str]]:
+
+def unflatten_generations(
+    generations: List[str], bs: int = None, num_beams: int = None
+) -> List[List[str]]:
     """Split a list of generations into batches of size bs
 
     c.f. https://huggingface.co/docs/transformers/v4.19.2/en/internal/generation_utils#transformers.generation_utils.BeamSearchDecoderOnlyOutput
@@ -24,11 +25,15 @@ def unflatten_generations(generations: List[str], bs: int=None, num_beams: int=N
         raise ValueError("Either bs or num_beams must be provided")
 
     if bs is not None and num_beams is not None:
-        assert len(generations) == bs * num_beams, f"len(generations)={len(generations)} but bs={bs} and num_beams={num_beams}"
+        assert (
+            len(generations) == bs * num_beams
+        ), f"len(generations)={len(generations)} but bs={bs} and num_beams={num_beams}"
 
     if num_beams is None:
         num_beams = len(generations) // bs
-    return [generations[i:i + num_beams] for i in range(0, len(generations), num_beams)]
+    return [
+        generations[i : i + num_beams] for i in range(0, len(generations), num_beams)
+    ]
 
 
 def get_first_no_empty_generation(predictions: List[List[str]]) -> List[str]:

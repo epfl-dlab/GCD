@@ -1,18 +1,21 @@
 # Logging
 
 
-#### How to change the logging level of a logger?
+#### How to to see debug logs?
 
-In each script, the logging level of each logger can be changed by the following:
+You need to set the logging level to `logging.DEBUG`
+
+
+
+In the main script, add the following lines:
 
 ```python
-log = utils.get_only_rank_zero_logger(__name__, stdout=True)
 import logging
-log.setLevel(logging.INFO) # or any other level
+
+logging.getLogger('src.models').setLevel(logging.DEBUG)
 ```
-
-By default, the logging level is set to `logging.INFO` in `utils.get_only_rank_zero_logger`.
-
+This will enable debug logs for the `src.models` module.
+You can surely enable debug logs for other modules or submodules.
 
 
 #### Why there is replication of logs commands?
@@ -29,3 +32,11 @@ log.info(f"test/f1: {running_f1}")
 
 The first three lines are for logging to pytorch lightning, while the last three lines are for logging to the console.
 The pytorch lightning logger takes care of writing the logs to local file and also to remote loggers such as wandb.
+
+#### I see logs from libraries such as openai and urllib3, how to disable them?
+
+```bash
+import logging
+logging.getLogger('openai').setLevel(logging.INFO)
+logging.getLogger('urllib3').setLevel(logging.INFO)
+```

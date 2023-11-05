@@ -23,9 +23,6 @@ from src.utils.hf_model_utils import get_hf_model_short_name
 
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
-
 
 def run_inference(cfg: DictConfig):
     assert (
@@ -94,6 +91,8 @@ cs.store(group="model", name="ie_model", node=IEHFModelPLConfig)
 
 OmegaConf.register_new_resolver("hf_model_name", get_hf_model_short_name)
 OmegaConf.register_new_resolver("replace_slash", lambda x: x.replace("/", "_"))
+
+
 @hydra.main(
     version_base="1.2", config_path="configs/hydra_conf", config_name="inference_root"
 )

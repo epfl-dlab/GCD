@@ -17,11 +17,11 @@
 },
 {
     "text": "The General Administration of Quality Supervision, Inspection and Quarantine was replaced by the State Administration for Market Regulation and is a government agency under the parent organization, the State Council of the People's Republic of China. Its headquarters is located in Haidian District, China.",
-    "output": "[s] General_Administration_of_Quality_Supervision,_Inspection_and_Quarantine [r] replaced by [o] State_Administration_for_Market_Regulation [r] instance of [o] Government_agency [r] parent organization [o] State_Council_of_the_People's_Republic_of_China [r] country [o] China [r] headquarters location [o] Haidian_District [e]"
+    "output": "[s] General_Administration_of_Quality_Supervision,_Inspection_and_Quarantine [r] replaced by [o] State_Administration_for_Market_Regulation [e] [s] General_Administration_of_Quality_Supervision,_Inspection_and_Quarantine [r] instance of [o] Government_agency [e] [s] General_Administration_of_Quality_Supervision,_Inspection_and_Quarantine [r] parent organization [o] State_Council_of_the_People's_Republic_of_China [e] [s] General_Administration_of_Quality_Supervision,_Inspection_and_Quarantine [r] country [o] China [e] [s] General_Administration_of_Quality_Supervision,_Inspection_and_Quarantine [r] headquarters location [o] Haidian_District [e]"
 },
 {
     "text": "Marcus Jacob Monrad was a Lutheran who passed away in Oslo and was buried in the Cemetery of Our Saviour.Marcus Jacob Monrad was a Lutheran who passed away in Oslo and was buried in the Cemetery of Our Saviour.",
-    "output": "[s] Marcus_Jacob_Monrad [r] place of death [o] object [e] [s] Marcus_Jacob_Monrad [r] place of burial [o] Cemetery_of_Our_SaviourCemetery_of_Our_Saviour [e] [s] Marcus_Jacob_Monrad [r] religion [o] Lutheranism [e]"
+    "output": "[s] Marcus_Jacob_Monrad [r] place of death [o] object [e] [s] Marcus_Jacob_Monrad [r] place of burial [o] Cemetery_of_Our_Saviour [e] [s] Marcus_Jacob_Monrad [r] religion [o] Lutheranism [e]"
 },
 {
     "text": "The Making of Maddalena was shot by James Van Trees as director of photography and is presented in black and white. The cast includes Edna Goodrich.",
