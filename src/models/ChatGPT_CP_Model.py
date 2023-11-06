@@ -73,7 +73,7 @@ class ChatGPT_CP_Model(ChatGPTModel):
             return None
         try:
             score = self.evalb_scorer.score_trees(gold_tree, test_tree) ## it is raised here
-        except (PYEVALB.scorer.LengthUnmatch):
+        except (PYEVALB.scorer.LengthUnmatch,PYEVALB.scorer.WordsUnmatch,ZeroDivisionError):
             score = None
         return score
 
