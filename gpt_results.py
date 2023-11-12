@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from scipy.stats import bootstrap
 import numpy as np
+import shutil
 
 os.environ["TIKTOKEN_CACHE_DIR"] = ""
 LOG_DIR_PATH = os.path.join(os.path.dirname(__file__), 'logs/inference/runs/')
@@ -23,11 +24,13 @@ EXPERIMENTS = ["2023-10-26T11:11:46.270317","2023-10-26T08:16:54.358704","2023-1
                "2023-11-04T00:03:15.774337","2023-11-04T00:08:15.753808","2023-11-04T00:13:49.137039","2023-11-04T00:16:12.175474",
                "2023-11-04T00:23:08.671894","2023-11-04T00:25:48.977962","2023-11-04T00:33:44.312454","2023-11-04T00:36:36.612471",
                "2023-10-25T04:02:58.135737"]
+MODELS = ["gpt-3.5-turbo-0613","gpt-4-0613","gpt-3.5-turbo-0301","gpt-3.5-turbo-instruct-0914","davinci-002","text-davinci-003"]
 print(len(EXPERIMENTS))
-def get_predictions_from_runs():
+def get_predictions_from_runs(save_results=False):
     predictions = {"ED":{data:{} for data in ED_DATASETS},
                    "IE":{data:{} for data in IE_DATASETS},
                    "CP":{data:{} for data in CP_DATASETS}}
+    pred_files = {model:{"IE":{},"CP":{},"ED":{}} for model in MODELS}
     for exp in os.listdir(LOG_DIR_PATH):
         for run in os.listdir(os.path.join(LOG_DIR_PATH,exp)):
             if "wandb" in os.listdir(os.path.join(LOG_DIR_PATH,exp,run)):
@@ -40,11 +43,27 @@ def get_predictions_from_runs():
                 with open(exp_metadata_file) as f:
                     exp_metadata = json.load(f)
                 if exp_metadata["startedAt"] in EXPERIMENTS:
+                    exp_prediction_file = os.path.join(LOG_DIR_PATH,exp,run,"predictions/testing_output_0.prediction.jsonl")
+                    exp_summary_file = os.path.join(LOG_DIR_PATH,exp,run,"wandb/latest-run/files/wandb-summary.json")
+                    pred_files[experiment_model][experiment_task][experiment_dataset] = (exp_metadata_file,exp_prediction_file,exp_summary_file)
                     print(experiment_task,experiment_dataset,experiment_model)
                     preds = pd.read_csv(os.path.join(LOG_DIR_PATH,exp,run,"csv_logs/version_0/metrics.csv"))
                     predictions[experiment_task][experiment_dataset][experiment_model] = preds
                     if len(preds)!=DATASET_LENGTHS[experiment_dataset]+1:
                         print("WARNING: Dataset length mismatch",experiment_dataset,len(preds),DATASET_LENGTHS[experiment_dataset])
+    if save_results:
+        for model in pred_files:
+            if not os.path.exists(os.path.join("results",model)):
+                os.mkdir(os.path.join("results",model))
+            for task in pred_files[model]:
+                if not os.path.exists(os.path.join("results",model,task)):
+                    os.mkdir(os.path.join("results",model,task))
+                for dataset in pred_files[model][task]:
+                    exp_metadata_file,exp_prediction_file,exp_summary_file = pred_files[model][task][dataset]
+                    shutil.copy(exp_metadata_file,os.path.join("results",model,task,dataset+"_metadata.json"))
+                    shutil.copy(exp_prediction_file,os.path.join("results",model,task,dataset+"_predictions.jsonl"))
+                    shutil.copy(exp_summary_file,os.path.join("results",model,task,dataset+"_summary.json"))
+    
     return predictions
 
 def calculate_bootstrap_result(predictions):

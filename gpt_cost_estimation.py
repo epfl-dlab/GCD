@@ -17,11 +17,11 @@ EXPERIMENTS = ["2023-10-26T11:11:46.270317","2023-10-26T08:16:54.358704","2023-1
                "2023-10-26T01:43:34.080302","2023-10-26T00:53:55.050774","2023-10-25T10:10:20.940546","2023-10-25T10:10:20.940546",
                "2023-10-24T16:58:59.470725","2023-10-24T16:33:47.657189","2023-10-24T14:51:00.702612","2023-10-24T13:06:12.365795",
                "2023-10-24T09:30:22.886399","2023-10-23T08:51:31.619617","2023-10-22T22:22:21.848546","2023-10-21T23:03:38.795276",
-               "2023-10-20T16:55:32.250680","2023-10-20T03:37:57.359277","2023-11-03T22:39:01.861778",
+               "2023-10-20T16:55:32.250680","2023-10-20T03:37:57.359277","2023-11-03T22:39:01.861778","2023-11-04T00:55:01.445432",
                "2023-11-03T23:15:08.232681","2023-11-03T23:44:29.580371","2023-11-03T23:50:04.568442","2023-11-03T23:58:07.564349",
                "2023-11-04T00:03:15.774337","2023-11-04T00:08:15.753808","2023-11-04T00:13:49.137039","2023-11-04T00:16:12.175474",
                "2023-11-04T00:23:08.671894","2023-11-04T00:25:48.977962","2023-11-04T00:33:44.312454","2023-11-04T00:36:36.612471",
-               "2023-11-04T00:55:01.445432","2023-10-25T04:02:58.135737"]
+               "2023-10-25T04:02:58.135737"]
 
 PRICES = {"gpt-3.5-turbo-0613":(0.0015,0.002),
           "gpt-4-0613":(0.03,0.06),
@@ -116,11 +116,7 @@ def estimate_all_costs(fixed_output_length=None):
         ed_task_estimates[dataset] = {}
         for metric in ["input_mean","output_mean","input_error","output_error"]:
             ed_task_estimates[dataset][metric] = np.mean([predicted_usage["ED"][dataset][model_res][metric] for model_res in predicted_usage["ED"][dataset]])
-    """for dataset in CP_DATASETS:
-        cp_task_estimates[dataset] = {}
-        for metric in ["input_mean","output_mean","input_error","output_error"]:
-            cp_task_estimates[dataset][metric] = np.mean([predicted_usage["CP"][dataset][model_res][metric] for model_res in predicted_usage["CP"][dataset]])         
-    """
+
     all_costs = {}
     for task in predicted_usage:
         all_costs[task] = {}
@@ -139,13 +135,7 @@ def estimate_all_costs(fixed_output_length=None):
                                                                   ed_task_estimates[data]["input_error"],
                                                                   ed_task_estimates[data]["output_error"],
                                                                   DATASET_LENGTHS[data],fixed_output_length)
-                """elif task=="CP":
-                    all_costs[task][data][model] = calculate_cost(model,cp_task_estimates[data]["input_mean"],
-                                                                  cp_task_estimates[data]["output_mean"],
-                                                                  cp_task_estimates[data]["input_error"],
-                                                                  cp_task_estimates[data]["output_error"],
-                                                                  DATASET_LENGTHS[data],fixed_output_length)
-                """
+            
     with open("cost_estimates.json", "w") as f:
         json.dump(all_costs, f)
     
