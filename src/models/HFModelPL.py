@@ -23,8 +23,6 @@ from src.utils.file_io import auto_write_text
 from src.utils.generic_text_collator import GenericTextCollator
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
 
 
 class HFModelPL(pl.LightningModule):
@@ -37,12 +35,16 @@ class HFModelPL(pl.LightningModule):
         self._init_constraint_module()
 
     def _init_model_and_tokenizer(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.hparams.pretrained_model_name_or_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.hparams.pretrained_model_name_or_path
+        )
 
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        hf_model_config = AutoConfig.from_pretrained(self.hparams.pretrained_model_name_or_path)
+        hf_model_config = AutoConfig.from_pretrained(
+            self.hparams.pretrained_model_name_or_path
+        )
         hf_model_config.update(self.hparams.hf_extra_model_config)
 
         self.model = AutoModelForCausalLM.from_pretrained(
@@ -59,7 +61,10 @@ class HFModelPL(pl.LightningModule):
         )
 
     def _init_constraint_module(self):
-        if self.hparams.gf_constraint_module is not None and self.hparams.trie_constraint_module is not None:
+        if (
+            self.hparams.gf_constraint_module is not None
+            and self.hparams.trie_constraint_module is not None
+        ):
             raise ValueError(
                 "You cannot specify both a GF constraint module and a Trie constraint module"
             )
@@ -67,7 +72,9 @@ class HFModelPL(pl.LightningModule):
         # ~~~ Constraint generation ~~~
         if self.hparams.gf_constraint_module is not None:
             log.info("Running inference with GF-CONSTRAINED decoding")
-            self.constraint_module = hydra.utils.instantiate(self.hparams.gf_constraint_module)
+            self.constraint_module = hydra.utils.instantiate(
+                self.hparams.gf_constraint_module
+            )
         elif self.hparams.trie_constraint_module is not None:
             log.info("Running inference with Trie-CONSTRAINED decoding")
             self.constraint_module = hydra.utils.instantiate(
@@ -77,7 +84,9 @@ class HFModelPL(pl.LightningModule):
             log.info("Running UNCONSTRAINED inference.")
             self.constraint_module = None
 
-    def forward(self, input_ids, attention_mask, decoder_attention_mask, labels=None, **kwargs):
+    def forward(
+        self, input_ids, attention_mask, decoder_attention_mask, labels=None, **kwargs
+    ):
         output = self.model(
             input_ids,
             attention_mask=attention_mask,
@@ -122,17 +131,17 @@ class HFModelPL(pl.LightningModule):
 
     @torch.no_grad()
     def sample(
-            self,
-            input_data,
-            input_is_processed_batch=False,
-            seed=None,
-            skip_special_tokens=True,
-            return_generation_outputs=False,
-            return_generation_inputs=False,
-            remove_prefix_from_generation=True,
-            prefix_allowed_tokens_fn=None,
-            inference=None,
-            **kwargs,
+        self,
+        input_data,
+        input_is_processed_batch=False,
+        seed=None,
+        skip_special_tokens=True,
+        return_generation_outputs=False,
+        return_generation_inputs=False,
+        remove_prefix_from_generation=True,
+        prefix_allowed_tokens_fn=None,
+        inference=None,
+        **kwargs,
     ):
         """Input data is a list of strings or a processed batch (contains src_input_ids,
         and src_attention_mask as expected in training)"""
@@ -143,7 +152,9 @@ class HFModelPL(pl.LightningModule):
 
         inference = inference or {}
         runtime_hf_generation_kwargs = inference.get("hf_generation_params", {})
-        extra_hf_generation_params = self.hparams.inference.get("hf_generation_params", {}).copy()
+        extra_hf_generation_params = self.hparams.inference.get(
+            "hf_generation_params", {}
+        ).copy()
 
         # By default, new keys are not allowed in hydras DictConfig
         # so we need to open it to update it
@@ -180,7 +191,9 @@ class HFModelPL(pl.LightningModule):
             len_input = len(input_ids[0])
             generation_outputs.sequences = generation_outputs.sequences[:, len_input:]
             if getattr(generation_outputs, "beam_indices", None) is not None:
-                generation_outputs.beam_indices = generation_outputs.beam_indices[:, len_input:]
+                generation_outputs.beam_indices = generation_outputs.beam_indices[
+                    :, len_input:
+                ]
 
         decoded_sequences: List[str] = self.tokenizer.batch_decode(
             generation_outputs.sequences, skip_special_tokens=skip_special_tokens
@@ -192,10 +205,14 @@ class HFModelPL(pl.LightningModule):
 
         # convert to batched decoded sequences: from batch_size x num_beams, seq_len to batch_size, num_beams, seq_len
         num_beams = len(decoded_sequences) // len(input_ids)
-        grouped_decoded_sequences = unflatten_generations(decoded_sequences, num_beams=num_beams)
+        grouped_decoded_sequences = unflatten_generations(
+            decoded_sequences, num_beams=num_beams
+        )
 
-        results = {"decoded_sequences": decoded_sequences,
-                      "grouped_decoded_sequences": grouped_decoded_sequences}
+        results = {
+            "decoded_sequences": decoded_sequences,
+            "grouped_decoded_sequences": grouped_decoded_sequences,
+        }
 
         if return_generation_inputs:
             results["generate_kwargs"] = generate_kwargs
@@ -217,7 +234,6 @@ class HFModelPL(pl.LightningModule):
             logger=self.logger,
         )
 
-
     def _write_step_output(self, step_output: Dict):
         prediction_outputs = step_output
 
@@ -237,7 +253,6 @@ class HFModelPL(pl.LightningModule):
 
         sample_output: Dict[str, Any] = self._get_predictions_for_batch(batch)
 
-
         return {
             "ids": ids,
             "inputs": raw_input,
@@ -256,7 +271,9 @@ class HFModelPL(pl.LightningModule):
         return outputs
 
     def _get_final_prediction(self, outputs: Dict[str, List[Any]]):
-        final_predictions: List[Any] = [predictions[0] for predictions in outputs["candidate_predictions"]]
+        final_predictions: List[Any] = [
+            predictions[0] for predictions in outputs["candidate_predictions"]
+        ]
         return final_predictions
 
     def _get_predictions_dir_path(self, output_dir=None, create_if_not_exists=True):

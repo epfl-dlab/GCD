@@ -7,8 +7,6 @@ from typing import List, Tuple
 from src import utils
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
 
 
 def get_linearization_class(identifier: str):

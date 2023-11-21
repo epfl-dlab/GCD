@@ -12,8 +12,6 @@ from src.utils.evaluation_helpers import (
 from src.utils.hf_gen_utils import get_first_no_empty_generation
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
 from src.models.HFModelPL import HFModelPL
 
 
@@ -23,7 +21,9 @@ class IEHFModelPL(HFModelPL):
 
         # ~~~ Inference ~~~
         linearization_class_id = self.hparams.get("linearization_class_id", None)
-        assert linearization_class_id is not None, "linearization_class_id must be specified, but got None"
+        assert (
+            linearization_class_id is not None
+        ), "linearization_class_id must be specified, but got None"
         log.info(f"Linearization class ID: {linearization_class_id}")
 
         self.linearization_class = utils.get_linearization_class(linearization_class_id)
@@ -56,8 +56,9 @@ class IEHFModelPL(HFModelPL):
             for text in outputs["targets"]
         ]
 
-        log.debug(f"Structured predictions: {structured_predictions}")
-        log.debug(f"Structured targets: {structured_targets}")
+        log.debug(
+            f"structured predictions: {structured_predictions}, structured targets: {structured_targets}"
+        )
 
         # Update the metrics
         p = self.ts_precision(structured_predictions, structured_targets)
@@ -65,9 +66,27 @@ class IEHFModelPL(HFModelPL):
         f1 = self.ts_f1(structured_predictions, structured_targets)
 
         # Log the metrics to wandb
-        self.log(f"test_{self.global_rank}/precision_step", p, on_step=True, on_epoch=False, prog_bar=True)
-        self.log(f"test_{self.global_rank}/recall_step", r, on_step=True, on_epoch=False, prog_bar=True)
-        self.log(f"test_{self.global_rank}/f1_step", f1, on_step=True, on_epoch=False, prog_bar=True)
+        self.log(
+            f"test_{self.global_rank}/precision_step",
+            p,
+            on_step=True,
+            on_epoch=False,
+            prog_bar=True,
+        )
+        self.log(
+            f"test_{self.global_rank}/recall_step",
+            r,
+            on_step=True,
+            on_epoch=False,
+            prog_bar=True,
+        )
+        self.log(
+            f"test_{self.global_rank}/f1_step",
+            f1,
+            on_step=True,
+            on_epoch=False,
+            prog_bar=True,
+        )
 
         # log the metrics to console
         log.info(f"test_{self.global_rank}/precision_step: {p}")
@@ -90,7 +109,9 @@ class IEHFModelPL(HFModelPL):
         return outputs
 
     def _get_final_prediction(self, outputs: Dict[str, List[Any]]):
-        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["candidate_predictions"])
+        first_no_empty_generations: List[str] = get_first_no_empty_generation(
+            outputs["candidate_predictions"]
+        )
 
         final_predictions = first_no_empty_generations
         return final_predictions

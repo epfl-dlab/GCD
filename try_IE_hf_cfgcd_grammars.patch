@@ -1,0 +1,90 @@
+Subject: [PATCH] try_IE_hf_cfgcd_grammars
+---
+Index: assets/ebnf_grammars/tmp/build_IE_grammar.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/assets/ebnf_grammars/tmp/build_IE_grammar.py b/assets/ebnf_grammars/tmp/build_IE_grammar.py
+new file mode 100644
+--- /dev/null	(date 1700576541479)
++++ b/assets/ebnf_grammars/tmp/build_IE_grammar.py	(date 1700576541479)
+@@ -0,0 +1,78 @@
++import json
++
++import random
++import string
++
++
++def generate_random_entity_names(n, min_length=5, max_length=10):
++    """
++    Generate 'n' random entity names composed of alphanumeric characters.
++
++    :param n: Number of entity names to generate.
++    :param min_length: Minimum length of each entity name.
++    :param max_length: Maximum length of each entity name.
++    :return: List of random entity names.
++    """
++    names = []
++    for _ in range(n):
++        length = random.randint(min_length, max_length)
++        name = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
++        names.append(name)
++    return names
++
++def load_names_from_jsonl(file_path):
++    """ Load names from a JSONL file. """
++    names = []
++    with open(file_path, 'r', encoding='utf-8') as file:
++        for line in file:
++            data = json.loads(line)
++            names.append(data['en_label'])
++    return names
++
++
++def format_names(names):
++    """Formats a list of names into a string for the grammar."""
++    return ' | '.join(f'"{name}"' for name in names)
++
++def create_grammar(entity_names, relation_names):
++    """Creates a grammar file based on the given entity and relation names."""
++    entity_str = format_names(entity_names)
++    relation_str = format_names(relation_names)
++
++    grammar_template = """root     ::= statement+
++statement::= "[s]" ws entity ws "[r]" ws relation ws "[o]" ws entity ws "[e]" ws
++entity  ::= {entities}
++relation ::= {relations}
++ws       ::= " "
++"""
++
++    return grammar_template.format(entities=entity_str, relations=relation_str)
++
++if __name__ == '__main__':
++    # Load entity names
++    # entity_names = load_names_from_jsonl('id2name_mappings/entity_mapping.jsonl')
++
++    # print("Number of entities: ", len(entity_names))
++    # entity_names= entity_names[:1000]
++
++    entity_names = generate_random_entity_names(10000)
++
++
++    # Load relation names
++    # relation_names = load_names_from_jsonl('id2name_mappings/relation_mapping.jsonl')
++
++    relation_names = generate_random_entity_names(100)
++
++    # # Example lists of entity and relation names
++    # entity_names = ["Peggy_de_Villiers", "Swimming_(sport)", "Swimming_pool"]
++    # relation_names = ["place_of_birth", "instance_of", "uses", "used_by"]
++
++    # Generate the grammar
++    grammar = create_grammar(entity_names, relation_names)
++
++
++    # Output the grammar to a file
++    with open("IE_rebel_10k.ebnf", "w") as file:
++        file.write(grammar)
++
++    print("Grammar file generated.")

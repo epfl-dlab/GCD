@@ -22,6 +22,15 @@ class BaseDataset(Dataset):
         self.params = params
         self.random_state = np.random.RandomState(seed)
 
+    @classmethod
+    def from_local(cls, path, seed=42):
+        """
+        Instantiate a datasets from a local directory and eager load the data
+        """
+        ds = cls(seed=seed)
+        ds.load_data(path=path)
+        return ds
+
     def __len__(self):
         raise NotImplementedError()
 

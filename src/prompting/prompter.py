@@ -28,16 +28,29 @@ class Prompter:
 
         return cls(instruction, demos, num_demo)
 
-    def materialize(self, runtime_input: str, output_prefix="") -> str:
+    def materialize(self, runtime_input: Dict, output_prefix="") -> str:
         prompt = self.instruction
         for i in range(self.num_demo):
             prompt += self.DEMOs[i]["text"] + " -> " + self.DEMOs[i]["output"] + "; "
-        prompt += runtime_input + " -> " + output_prefix
+        prompt += runtime_input["text"] + " -> " + output_prefix
         return prompt
 
     def __call__(self, runtime_input):
         return self.materialize(runtime_input)
 
     def get_overhead_token_num(self, tokenizer) -> int:
-        materialized_prompt = self.materialize("")
+        materialized_prompt = self.materialize({"text": ""})
         return len(tokenizer.tokenize(materialized_prompt))
+
+
+class DraftPrompter(Prompter):
+    def __init__(self, instruction: str, demos=None, num_demo=0):
+        super().__init__(instruction, demos, num_demo)
+
+    def materialize(self, runtime_input: Dict, output_prefix="") -> str:
+        prompt = self.instruction
+        for i in range(self.num_demo):
+            prompt += self.DEMOs[i]["text"] + " -> " + self.DEMOs[i]["draft"] + " -> " + self.DEMOs[i]["output"] + "; "
+        prompt += runtime_input["text"] + " -> " + runtime_input["draft"] + " -> " + output_prefix
+        return prompt
+

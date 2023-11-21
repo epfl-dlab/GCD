@@ -20,8 +20,6 @@ from src import utils
 from importlib.util import find_spec
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
 
 
 def run_task(cfg: DictConfig, run_func: Callable) -> None:
@@ -52,7 +50,9 @@ def run_task(cfg: DictConfig, run_func: Callable) -> None:
             f"-- {(time.time() - start_time) / 3600:.2f} hours"
         )
         log.info(content)
-        utils.general_helpers.save_string_to_file(path, content)  # save task execution time (even if exception occurs)
+        utils.general_helpers.save_string_to_file(
+            path, content
+        )  # save task execution time (even if exception occurs)
         utils.general_helpers.close_loggers()  # close loggers (even if exception occurs so multirun won't fail)
         log.info(f"Output dir: {cfg.output_dir}")
 
@@ -81,7 +81,10 @@ def _clean_working_dir_from_subprocesses_output(work_dir, output_dir):
 def _move_predictions_for_subprocesses(predictions_dir_src, predictions_dir_dst):
     if os.path.exists(predictions_dir_src):
         for f in os.listdir(predictions_dir_src):
-            shutil.move(os.path.join(predictions_dir_src, f), os.path.join(predictions_dir_dst, f))
+            shutil.move(
+                os.path.join(predictions_dir_src, f),
+                os.path.join(predictions_dir_dst, f),
+            )
         shutil.rmtree(predictions_dir_src)
 
 
@@ -162,7 +165,9 @@ def log_hyperparameters(object_dict: dict) -> None:
     hparams["params"] = {
         "total": sum(p.numel() for p in model.parameters()),
         "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad),
-        "non_trainable": sum(p.numel() for p in model.parameters() if not p.requires_grad),
+        "non_trainable": sum(
+            p.numel() for p in model.parameters() if not p.requires_grad
+        ),
     }
 
     for key in hparams:
@@ -295,7 +300,9 @@ def chunk_elements(elements, n_items_per_group):
     """
     if isinstance(n_items_per_group, int):
         assert len(elements) % n_items_per_group == 0
-        n_items_per_group = [n_items_per_group for _ in range(len(elements) // n_items_per_group)]
+        n_items_per_group = [
+            n_items_per_group for _ in range(len(elements) // n_items_per_group)
+        ]
 
     grouped_sequences = []
     start_idx = 0

@@ -16,13 +16,11 @@ from src.utils.evaluation_helpers import (
 from src.utils.hf_gen_utils import get_first_no_empty_generation
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
+
 from src.models.HFModelPL import HFModelPL
 
 
 class CPHFModelPL(HFModelPL):
-
     def __init__(self, params: Union[Dict, OmegaConf]):
         super().__init__(params)
 
@@ -63,10 +61,17 @@ class CPHFModelPL(HFModelPL):
         ]
 
     @staticmethod
-    def parse(line:str) -> Optional[Any]:
+    def parse(line: str) -> Optional[Any]:
         try:
-            structured_prediction:Optional[Any] = parser.create_from_bracket_string(line)
-        except (AttributeError, parser.ParsingError, IndexError, PYEVALB.scorer.LengthUnmatch):
+            structured_prediction: Optional[Any] = parser.create_from_bracket_string(
+                line
+            )
+        except (
+            AttributeError,
+            parser.ParsingError,
+            IndexError,
+            PYEVALB.scorer.LengthUnmatch,
+        ):
             structured_prediction = None
         return structured_prediction
 
@@ -75,31 +80,43 @@ class CPHFModelPL(HFModelPL):
             return None
         return self.evalb_scorer.score_trees(gold_tree, test_tree)
 
-    def _get_final_prediction(self, outputs: Dict[str, List[Any]]) -> List[Optional[str]]:
+    def _get_final_prediction(
+        self, outputs: Dict[str, List[Any]]
+    ) -> List[Optional[str]]:
         """
         This function is used to get the structured prediction in a string format from the outputs of the model.
         N.B. the output is supposed to be a list of strings, each string is a structured prediction that can be further processed.
         For example, in the case of a constituency parsing task, the output is only cleaned from the spaces and the brackets.
         The parsing is done in the test_step_end function.
         """
-        first_no_empty_generations: List[str] = get_first_no_empty_generation(outputs["candidate_predictions"])
+        first_no_empty_generations: List[str] = get_first_no_empty_generation(
+            outputs["candidate_predictions"]
+        )
 
-        final_predictions: List[Optional[str]] = [rm_space_ptb(extract_string_in_bracket(text)) for text in first_no_empty_generations]
+        final_predictions: List[Optional[str]] = [
+            rm_space_ptb(extract_string_in_bracket(text))
+            for text in first_no_empty_generations
+        ]
         return final_predictions
 
     def test_step_end(self, outputs: Dict[Any, Any]):
         outputs = super().test_step_end(outputs)
 
-        structured_targets: List[Optional[str]] = [self.parse(rm_space_ptb(target)) for target in outputs["targets"]]
-        structured_predictions: List[Optional[str]] = [self.parse(pred) for pred in outputs["final_predictions"]]
+        structured_targets: List[Optional[str]] = [
+            self.parse(rm_space_ptb(target)) for target in outputs["targets"]
+        ]
+        structured_predictions: List[Optional[str]] = [
+            self.parse(pred) for pred in outputs["final_predictions"]
+        ]
 
         # Update the metrics
         for i in range(len(structured_predictions)):
             valid = 0
             pred_tree = structured_predictions[i]
             gold_tree = structured_targets[i]
-            log.debug(f"outputs: {pred_tree}")
-            log.debug(f"targets: {gold_tree}")
+            log.debug(
+                f"structured predictions: {pred_tree}, structured targets: {gold_tree}"
+            )
             result: Optional = self.score(gold_tree, pred_tree)
 
             if result is None or result.state == 1:

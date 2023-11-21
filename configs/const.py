@@ -12,3 +12,5 @@ MODELS_DIR = os.environ["HF_MODELS_DIR"]
 ASSETS_DIR = os.path.join(os.path.dirname(CONFIG_DIR), "assets")
 
 PGF_DIR = os.path.join(ASSETS_DIR, "pgf")
+
+DATA_DIR = os.path.join(os.path.dirname(CONFIG_DIR), "data")

@@ -7,11 +7,10 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import Dataset, DataLoader
 
 from src import utils
-from src.prompting.prompter import Prompter
 
 log = utils.get_only_rank_zero_logger(__name__, stdout=True)
-import logging
-log.setLevel(logging.INFO)
+
+
 
 class DataModule(LightningDataModule, ABC):
     """
@@ -81,8 +80,6 @@ class DataModule(LightningDataModule, ABC):
         if (stage == "fit" or stage is None) and self.data_train is None:
             self.data_train = hydra.utils.instantiate(
                 self.dataset_parameters["train"]["dataset"],
-
-
             )
             log.info(
                 "The train dataset has been loaded and has %d samples"
@@ -96,8 +93,6 @@ class DataModule(LightningDataModule, ABC):
                 self.data_val = [
                     hydra.utils.instantiate(
                         dataset_parameters,
-
-
                     )
                     for dataset_parameters in self.dataset_parameters["val"]["datasets"]
                 ]
@@ -107,8 +102,6 @@ class DataModule(LightningDataModule, ABC):
             else:
                 self.data_val = hydra.utils.instantiate(
                     self.dataset_parameters["val"]["dataset"],
-
-
                 )
                 log.info(
                     "The validation dataset has been loaded and has %d samples"
