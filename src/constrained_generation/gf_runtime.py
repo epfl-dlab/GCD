@@ -4,6 +4,7 @@ import shlex
 import socket
 import subprocess
 import time
+import itertools
 from typing import List, Union
 
 import numpy as np
@@ -43,38 +44,44 @@ def _is_port_available(port):
             return False
 
 
-class GFServerRuntime(GFRuntime):
+class GFServerPoolRuntime(GFRuntime):
     """
-    A runtime for GF implemented as a http server.
+    A runtime for GF implemented as a http server pool.
     """
 
     DOMAIN: str = "http://localhost"
 
-    def __init__(self, default_pgf: str, grammar_dir=None, port: int = 41296):
-        """TODO
-        pgf_or_pgf_dirname should be two arguments:
-        - pgf: the pgf file name, configure the pgf before runtime
-        - pgf=None: pass the pgf at runtime, this is the case for runtime-dependent grammars
-        - root_dir: simply for convenience, reduce the absolute path to relative path
+    def __init__(self, default_pgf: str, grammar_dir=None, port_start: int = 41296, n: int = 2):
         """
-        # default_pgf = self.__preprocess_pgf(default_pgf, root_dir=grammar_dir)
+        Initialize multiple GF server instances.
+        """
         self.runtime_pgf_dir = grammar_dir
         self._default_pgf = default_pgf
+        self.server_processes = []
+        self.urls = []
 
-        self.__prepare_launch(port=port)
-        self.server_process = self.__launch_server(
-            root_dir=self.runtime_pgf_dir, verbose=True
-        )
+        for _ in range(n):
+            port = self.__find_free_port(port_start)
+            self.urls.append(GFServerPoolRuntime.DOMAIN + ":" + str(port))
+            server_process = self.__launch_server(
+                port=port, root_dir=self.runtime_pgf_dir, verbose=True
+            )
+            self.server_processes.append(server_process)
+            port_start = port + 1  # Increment the port for the next server
 
-    def __prepare_launch(self, port: int = 41296):
-        # Find a free port
+        # Create an iterator for round-robin load balancing
+        self.server_iterator = itertools.cycle(self.urls)
+
+    def __find_free_port(self, port):
+        """
+        Find a free port starting from the given port.
+        """
         while not _is_port_available(port):
             port += 1
-        self.port = port
-        self.url = GFServerRuntime.DOMAIN + ":" + str(self.port)
+        return port
 
-    def __launch_server(self, root_dir: str, verbose: bool = True):
-        cmd = f"gf --document-root={root_dir} --server={self.port}"
+    def __launch_server(self, port: int, root_dir: str, verbose: bool = True):
+        cmd = f"gf --document-root={root_dir} --server={port}"
         log.debug("Launching server with command: " + cmd)
         # Start the subprocess and detach it from the parent process
         # Split the command string into a list of arguments
@@ -89,7 +96,8 @@ class GFServerRuntime(GFRuntime):
         )
 
         # Wait for the server to be ready
-        log.debug(f"visit {self.url} to check if the server is ready")
+        url = GFServerPoolRuntime.DOMAIN + ":" + str(port)
+        log.debug(f"visit {url} to check if the server is ready")
 
         # wait for the server to be ready
         time.sleep(0.1)
@@ -97,6 +105,12 @@ class GFServerRuntime(GFRuntime):
         return server_process
 
     def complete(self, input_tokens: List[str], pgf=None) -> List[str]:
+        """
+        Distribute the request to the server pool.
+        """
+        # Use the next server in the round-robin sequence
+        url = next(self.server_iterator)
+
         if pgf is not None and self.__is_grammar_available(pgf):
             pgf_to_use = pgf
         else:
@@ -105,7 +119,7 @@ class GFServerRuntime(GFRuntime):
         if pgf_to_use is None:
             raise RuntimeError("pgf is not specified")
 
-        url = urljoin(self.url, pgf_to_use)
+        url = urljoin(url, pgf_to_use)
         input_tokens_str: str = _concat_input_ids_to_str(input_tokens)
         params = {"command": "complete", "input": input_tokens_str}
 
@@ -131,7 +145,11 @@ class GFServerRuntime(GFRuntime):
         return os.path.exists(path)
 
     def clear(self):
-        self.server_process.terminate()
+        """
+        Terminate all server processes.
+        """
+        for process in self.server_processes:
+            process.terminate()
 
     def random_decode(self, n: int, tokens2exclude: set[str]) -> List[float]:
         input_tokens = []
@@ -157,8 +175,7 @@ class GFServerRuntime(GFRuntime):
                 input_tokens = []
         return decoding_time
 
-
-class GFServerRuntimeForLM(GFServerRuntime):
+class GFServerRuntimeForLM(GFServerPoolRuntime):
     def get_prefix_allowed_tokens_for_LM(
         self, prefix_tokens: Union[List[int], object], pgf: str = None
     ) -> List[int]:
@@ -188,7 +205,7 @@ if __name__ == "__main__":
     pgf_dir = (
         "/Users/saibo/Research/Projects/GCD/GF-Grammar-Factory/asset/GF-grammars/pgf"
     )
-    gf_server = GFServerRuntime(default_pgf=pgf, grammar_dir=pgf_dir)
+    gf_server = GFServerPoolRuntime(default_pgf=pgf, grammar_dir=pgf_dir)
     print(gf_server.complete(input_tokens=[]))
     print(gf_server.complete(input_tokens=["this"]))
     gf_server.clear()
