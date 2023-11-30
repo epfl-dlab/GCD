@@ -16,7 +16,7 @@
 
 With the repository cloned, we recommend creating a new [conda](https://docs.conda.io/en/latest/) virtual environment:
 ```bash
-conda env create -n GCD python=3.9
+conda create -n GCD python=3.9
 conda activate GCD
 ```
 
