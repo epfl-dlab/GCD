@@ -5,6 +5,20 @@
 # Grammar-Constrained Decoding for Structured NLP Tasks without Finetuning
 
 ---
+
+## 🌟 New Implementation Compatible with HuggingFace Transformers
+
+We provide an implementation of GCD that is compatible with the popular [Transformers library](https://github.com/huggingface/transformers)! 
+
+This new package, [Transformers-CFG](https://github.com/Saibo-creator/transformers-CFG), extends the capabilities of our Grammar-Constrained Decoding (GCD) approach by integrating seamlessly with the `Transformers` library. It offers:
+
+- **Easy Integration:** Quickly combine the power of GCD with any model listed in the `transformers` library with just few lines of code!
+- **Enhanced Performance:** Leverage the GCD technique for more efficient and accurate generation.
+- **Friendly Interface:** Implemented with the EBNF grammar interface, making it accessible for both beginners and experts.
+
+Get started with Transformers-CFG [here](https://github.com/Saibo-creator/transformers-CFG).
+
+---
 ## 1. The Overview of GCD
 
 <div align="center">
