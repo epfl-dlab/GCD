@@ -52,7 +52,6 @@ pip install -r requirements.txt
 This repository contains the code for the models and experiments in [Grammar-Constrained Decoding for Structured NLP Tasks without Finetuning](https://arxiv.org/abs/2305.13971)
 
 ```
-User
 @inproceedings{geng-etal-2023-grammar,
 	title        = {Grammar-Constrained Decoding for Structured {NLP} Tasks without Finetuning},
 	author       = {Geng, Saibo  and Josifoski, Martin  and Peyrard, Maxime  and West, Robert},
