@@ -16,7 +16,7 @@ This new package, [Transformers-CFG](https://github.com/epfl-dlab/transformers-C
 - **Enhanced Performance:** Leverage the GCD technique for more efficient and accurate generation.
 - **Friendly Interface:** Implemented with the EBNF grammar interface, making it accessible for both beginners and experts.
 
-Get started with Transformers-CFG [here](https://github.com/Saibo-creator/transformers-CFG).
+Get started with Transformers-CFG [here](https://github.com/epfl-dlab/transformers-CFG).
 
 ---
 ## 1. The Overview of GCD
